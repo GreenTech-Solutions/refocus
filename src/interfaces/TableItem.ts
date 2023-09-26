@@ -5,4 +5,5 @@ export interface ITableItem {
   phone: string;
   email: string;
   city: string;
+  visibility?: boolean;
 }

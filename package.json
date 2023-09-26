@@ -11,10 +11,8 @@
   "dependencies": {
     "reset-css": "^5.0.2",
     "sass": "^1.68.0",
-    "vite-plugin-vuetify": "^1.0.2",
     "vite-svg-loader": "^4.0.0",
-    "vue": "^3.3.4",
-    "vuetify": "^3.3.17"
+    "vue": "^3.3.4"
   },
   "devDependencies": {
     "@types/node": "^20.7.0",
