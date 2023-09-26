@@ -95,5 +95,13 @@
 <style scoped>
   .wrapper {
     padding: 20px 100px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+
+    @media (max-width: 700px) {
+      padding: 20px 40px;
+    }
   }
 </style>

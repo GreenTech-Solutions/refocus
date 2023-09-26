@@ -55,6 +55,7 @@
       required: false,
     },
   });
+
   const headCells: TableHeadCells = new TableHeadCells([
     new TableHeadCell({
       image: true,
@@ -111,69 +112,71 @@
 </script>
 
 <template>
-  <div class="table">
-    <div class="table__header">
-      <div class="table__title">{{ $props.title }}</div>
-      <div class="table__description">{{ $props.description }}</div>
-    </div>
-    <table class="table__content">
-      <thead class="table__head">
-        <th class="table__head-cell" v-for="(headCell, index) in headCells.get()" :key="index">
-          <PersonIcon v-if="headCell.image" class="table__icon" />
+  <div class="table__wrapper">
+    <div class="table">
+      <div class="table__header">
+        <div class="table__title">{{ $props.title }}</div>
+        <div class="table__description">{{ $props.description }}</div>
+      </div>
+      <table class="table__content">
+        <thead class="table__head">
+          <th class="table__head-cell" v-for="(headCell, index) in headCells.get()" :key="index">
+            <PersonIcon v-if="headCell.image" class="table__icon" />
 
-          <div v-if="!headCell.image && !headCell.text?.startsWith('Видимость')" class="table__head-content">
-            <div>{{ headCell.text }}</div>
-            <SortIcon v-if="headCell.sortable" class="table__button table__icon" @click="onSortClick" />
-          </div>
-          <div v-if="headCell.text?.startsWith('Видимость')" class="table__head-content">
-            <span>{{ headCell.text }}</span>
-            <InfoIcon class="table__icon table__button" @click="onInfoClick" />
-            <transition name="fade" mode="in-out">
-              <div class="table__info" v-show="isInfoVisible">
-                Показывает пользователей, которые видны участникам в чате и которым можно написать сообщение.<br />
-                Остальным пользователям участник может написать, только если они впервые начали диалог
-                <CloseIcon class="table__icon table__button table__info-close" @click="onInfoClick" />
-              </div>
-            </transition>
-          </div>
-        </th>
-      </thead>
-      <tbody class="table__body">
-        <tr v-for="(item, index) in items.get()" :key="index" class="table__row">
-          <td class="table__cell table__cell_centered">
-            <PersonIcon v-if="!item.avatar" class="table__icon" />
-            <img v-else :src="item.avatar" class="table__icon table__avatar" />
-          </td>
-          <td class="table__cell">
-            <div class="table__cell-info">
-              <span>{{ item.name }}</span>
-              <span>{{ item.position }}</span>
+            <div v-if="!headCell.image && !headCell.text?.startsWith('Видимость')" class="table__head-content">
+              <div>{{ headCell.text }}</div>
+              <SortIcon v-if="headCell.sortable" class="table__button table__icon" @click="onSortClick" />
             </div>
-          </td>
-          <td class="table__cell table__cell_centered table__cell_narrow" v-if="$props.visibility">
-            <EyeOpen v-if="item.visibility" class="table__icon table__button" />
-            <EyeClose v-else class="table__icon table__button" />
-          </td>
-          <td class="table__cell">{{ item.phone }}</td>
-          <td class="table__cell">{{ item.email }}</td>
-          <td class="table__cell">
-            <div class="table__cell_inner">
-              {{ item.city }}
-              <DotsIcon
-                :id="`dots-${index}`"
-                class="table__icon_big table__button"
-                @click="onDotsClick($event, index)" />
+            <div v-if="headCell.text?.startsWith('Видимость')" class="table__head-content">
+              <span>{{ headCell.text }}</span>
+              <InfoIcon class="table__icon table__button" @click="onInfoClick" />
               <transition name="fade" mode="in-out">
-                <div v-show="isContextVisible[index]" class="table__menu" :id="`menu-${index}`">
-                  <span class="table__menu-item">Редактировать</span>
-                  <span class="table__menu-item">Удалить</span>
+                <div class="table__info" v-show="isInfoVisible">
+                  Показывает пользователей, которые видны участникам в чате и которым можно написать сообщение.<br />
+                  Остальным пользователям участник может написать, только если они впервые начали диалог
+                  <CloseIcon class="table__icon table__button table__info-close" @click="onInfoClick" />
                 </div>
               </transition>
             </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          </th>
+        </thead>
+        <tbody class="table__body">
+          <tr v-for="(item, index) in items.get()" :key="index" class="table__row">
+            <td class="table__cell table__cell_centered">
+              <PersonIcon v-if="!item.avatar" class="table__icon" />
+              <img v-else :src="item.avatar" class="table__icon table__avatar" />
+            </td>
+            <td class="table__cell">
+              <div class="table__cell-info">
+                <span>{{ item.name }}</span>
+                <span>{{ item.position }}</span>
+              </div>
+            </td>
+            <td class="table__cell table__cell_centered table__cell_narrow" v-if="$props.visibility">
+              <EyeOpen v-if="item.visibility" class="table__icon_big table__button" />
+              <EyeClose v-else class="table__icon_big table__button" />
+            </td>
+            <td class="table__cell">{{ item.phone }}</td>
+            <td class="table__cell">{{ item.email }}</td>
+            <td class="table__cell">
+              <div class="table__cell_inner">
+                {{ item.city }}
+                <DotsIcon
+                  :id="`dots-${index}`"
+                  class="table__icon_big table__button"
+                  @click="onDotsClick($event, index)" />
+                <transition name="fade" mode="in-out">
+                  <div v-show="isContextVisible[index]" class="table__menu" :id="`menu-${index}`">
+                    <span class="table__menu-item">Редактировать</span>
+                    <span class="table__menu-item">Удалить</span>
+                  </div>
+                </transition>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -182,13 +185,18 @@
     display: table;
     border-collapse: collapse;
     width: 100%;
+    font-size: 14px;
+
+    &__wrapper {
+      overflow-x: auto;
+    }
 
     &__header {
       color: $textColorHighlited;
       display: flex;
       flex-direction: column;
-      gap: 5px;
-      padding-bottom: 10px;
+      gap: 10px;
+      padding-bottom: 15px;
     }
 
     &__title {
@@ -201,8 +209,8 @@
       height: 15px;
 
       &_big {
-        width: 20px;
-        height: 20px;
+        min-width: 25px;
+        height: 25px;
       }
     }
 
@@ -242,6 +250,7 @@
       &-content {
         display: flex;
         justify-content: space-between;
+        gap: 5px;
       }
     }
 
@@ -320,7 +329,7 @@
     }
 
     &__info {
-      width: 200px;
+      width: 240px;
       font-size: 12px;
 
       &-close {
